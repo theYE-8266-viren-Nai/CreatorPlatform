@@ -1,5 +1,7 @@
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
+import ProductsDisplay from "./components/ProductsDisplay";
+import RecentlyLaunched from "./components/RecentlyLaunched";
 
 /**
  * Home page: full-viewport hero with fixed navbar.
@@ -9,8 +11,9 @@ import HeroSection from "./components/HeroSection";
 export default function Home() {
   return (
     <div className="hero-gradient min-h-screen font-sans">
-      <Navbar />
       <HeroSection />
+      <ProductsDisplay />
+      <RecentlyLaunched/>
     </div>
   );
 }
