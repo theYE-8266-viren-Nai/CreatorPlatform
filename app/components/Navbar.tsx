@@ -25,9 +25,9 @@ type NavLink = {
 /** Primary navigation items shown in desktop bar and mobile drawer */
 const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "#home", icon: House },
-  { label: "About", href: "#about", icon: Info },
-  { label: "Services", href: "#services", icon: Briefcase },
-  { label: "Contact", href: "#contact", icon: Mail },
+  // { label: "About", href: "#about", icon: Info },
+  { label: "Explore", href: "#services", icon: Briefcase },
+  // { label: "Contact", href: "#contact", icon: Mail },
 ];
 
 /**

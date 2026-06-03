@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   title: "iBuiltThis — Share What You've Built",
   description:
     "A community platform for creators to showcase apps, AI tools, SaaS products, and creative projects.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
