@@ -68,7 +68,7 @@ export default function HeroSection() {
           style={{ animationDelay: "400ms" }}
         >
           <Link
-            href="#contact"
+            href="/submit"
             className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-brand-pink px-8 text-sm font-semibold text-white shadow-lg shadow-brand-pink/30 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-brand-pink/40 active:scale-[0.98]"
           >
             <svg
@@ -79,7 +79,7 @@ export default function HeroSection() {
             >
               <path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21 8 14 2 9.4h7.6L12 2z" />
             </svg>
-            Get Started
+            Submit Product
           </Link>
           <Link
             href="#services"

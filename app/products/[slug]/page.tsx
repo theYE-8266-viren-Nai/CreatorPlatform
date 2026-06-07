@@ -1,14 +1,25 @@
-import { featuredProducts } from "@/constants";
+import {
+  getFeaturedProducts,
+  getProductBySlug,
+} from "@/lib/products/product-select";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+export async function generateStaticParams() {
+  const products = await getFeaturedProducts();
+
+  return products.map((product) => ({
+    slug: product.slug,
+  }));
+}
 
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
-  const product = featuredProducts.find((p) => p.id === Number(id));
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();
@@ -23,7 +34,7 @@ export default async function ProductPage({
         <h1 className="mt-6 text-3xl font-bold text-slate-900">{product.name}</h1>
         <p className="mt-4 text-slate-600">{product.description}</p>
         <p className="mt-6 text-sm font-medium text-slate-700">
-          {product.votes} votes
+          {product.voteCount} votes
         </p>
       </div>
     </main>

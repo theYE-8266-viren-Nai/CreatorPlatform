@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 import {
   Briefcase,
   House,
-  Info,
   LogIn,
-  Mail,
   Menu,
   Sparkles,
   UserPlus,
@@ -91,6 +90,16 @@ export default function Navbar() {
           </ul>
 
           <div className="ml-1 flex items-center gap-2 border-l border-slate-200/80 pl-3">
+            <Button
+              asChild
+              size="sm"
+              className="h-9 bg-brand-pink px-3 font-semibold shadow-md shadow-brand-pink/20 hover:bg-brand-pink/90"
+            >
+              <Link href="/submit">
+                <Sparkles className="h-4 w-4" aria-hidden />
+                Submit
+              </Link>
+            </Button>
             <Show when="signed-out">
               <SignInButton>
                 <button
@@ -139,7 +148,7 @@ export default function Navbar() {
       {/* ——— Mobile slide-down menu ——— */}
       <div
         id="mobile-menu"
-        className={`overflow-hidden border-t border-white/30 bg-cream/95 backdrop-blur-lg transition-[max-height,opacity] duration-300 ease-out md:hidden ${menuOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
+        className={`overflow-hidden border-t border-white/30 bg-cream/95 backdrop-blur-lg transition-[max-height,opacity] duration-300 ease-out md:hidden ${menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           }`}
         aria-hidden={!menuOpen}
       >
@@ -165,6 +174,17 @@ export default function Navbar() {
               </Link>
             </li>
           ))}
+          <li className="mt-2">
+            <Button
+              asChild
+              className="h-11 w-full bg-brand-pink font-semibold shadow-md shadow-brand-pink/20 hover:bg-brand-pink/90"
+            >
+              <Link href="/submit" onClick={closeMenu}>
+                <Sparkles className="h-4 w-4" aria-hidden />
+                Submit Product
+              </Link>
+            </Button>
+          </li>
           <li className="mt-2 border-t border-white/50 pt-3">
             <Show when="signed-out">
               <div className="grid grid-cols-2 gap-2">

@@ -1,11 +1,13 @@
 import { Sparkles, CalendarDays } from "lucide-react";
+import { getRecentlyLaunchedProducts } from "@/lib/products/product-select";
+import { getMostRecentProduct } from "@/lib/products/utils";
+import { ProductCard } from "@/components/products/product-card";
 
-import { recentlyLaunchedProducts } from "@/constants";
+export async function RecentlyLaunchedSection() {
+  const products = await getRecentlyLaunchedProducts();
+  const mostRecentId = getMostRecentProduct(products)?.id;
 
-import { FeaturedProductCard } from "./FeaturedProductCard";
-
-export function RecentlyLaunchedSection() {
-  if (!recentlyLaunchedProducts.length) {
+  if (!products.length) {
     return (
       <section className="flex flex-col gap-8 pt-2">
         <header className="space-y-1">
@@ -53,10 +55,16 @@ export function RecentlyLaunchedSection() {
         </p>
       </header>
 
-      <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
-        {recentlyLaunchedProducts.map((product) => (
-          <li key={product.id}>
-            <FeaturedProductCard product={product} />
+      <ul className="grid gap-6 sm:grid-cols-2">
+        {products.map((product) => (
+          <li
+            key={product.id}
+            className="transition-all duration-200 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:drop-shadow-xl"
+          >
+            <ProductCard
+              product={product}
+              mostRecent={product.id === mostRecentId}
+            />
           </li>
         ))}
       </ul>

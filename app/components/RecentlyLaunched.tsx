@@ -1,11 +1,9 @@
-import React from 'react'
+import { RecentlyLaunchedSection } from "./featured/RecentlyLaunchedSection";
 
-const RecentlyLaunched = () => {
+export default function RecentlyLaunched() {
   return (
-    <>
-      <h1>Hello </h1>
-    </>
-  )
+    <section className="mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
+      <RecentlyLaunchedSection />
+    </section>
+  );
 }
-
-export default RecentlyLaunched

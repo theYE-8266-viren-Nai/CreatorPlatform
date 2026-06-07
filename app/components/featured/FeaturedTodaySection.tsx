@@ -1,10 +1,10 @@
-import { featuredProducts } from "@/constants";
+import { getFeaturedProducts } from "@/lib/products/product-select";
 
 import { FeaturedProductCard } from "./FeaturedProductCard";
 import { FeaturedTodayHeader } from "./FeaturedTodayHeader";
 
-export function FeaturedTodaySection() {
-  const products = featuredProducts;
+export async function FeaturedTodaySection() {
+  const products = await getFeaturedProducts();
 
   if (!products.length) {
     return (

@@ -1,16 +1,17 @@
-import "dotenv/config";
+import * as dotenv from "dotenv";
+dotenv.config({ path: ".env.local" }); // must be at the very top
 import { drizzle } from "drizzle-orm/neon-http";
 import { products } from "./schema";
 import { allProducts } from "./data";
 
-const db = drizzle(process.env.DATABASE_URL!);
+const db = drizzle(process.env.NEON!);
 
 async function main() {
-  console.log("🌱 Seeding database...");
+  console.log("Seeding database...");
 
   // Clear existing data
   await db.delete(products);
-  console.log("✅ Cleared existing data");
+  console.log(" Cleared existing data");
 
   // Insert products from data.ts
   for (const product of allProducts) {
