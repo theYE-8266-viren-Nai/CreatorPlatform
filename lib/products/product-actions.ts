@@ -1,25 +1,51 @@
-"use server"
+"use server";
 
 import { db } from "@/db";
 import { products } from "@/db/schema";
-import { revalidatePath } from "next/cache";
-import { productServerSchema } from "@/lib/validations/product";
+import { revalidateTag } from "next/cache";
+import { productInsertSchema } from "@/lib/validations/product";
+import { auth, currentUser } from "@clerk/nextjs/server"; // Import Clerk server helpers
 
 export async function addProduct(payload: unknown) {
-  const result = productServerSchema.safeParse(payload);
-
-  if (!result.success) {
-    return { success: false, error: "Invalid data." };
-  }
-
   try {
+    // 1. Grab authentication details securely from Clerk on the server
+    const { userId } = await auth();
+    const user = await currentUser();
+
+    if (!userId) {
+      return { success: false, error: "You must be logged in to submit a product." };
+    }
+
+    // 2. Build out the complete metadata payload matching your schema definitions
+    const fullPayload = {
+      ...(payload as Record<string, any>),
+      userId,
+      submittedBy: user?.username || user?.firstName || "anonymous",
+    };
+
+    // 3. Validate against productInsertSchema (handles status defaults, metadata, etc.)
+    const result = productInsertSchema.safeParse(fullPayload);
+
+    if (!result.success) {
+      return { success: false, error: "Invalid data structure." };
+    }
+
+    // 4. Insert the clean, verified data into Neon DB via Drizzle
     await db.insert(products).values({
-      ...result.data,
-      status: "pending",
-      submittedBy: "anonymous",
+      name: result.data.name,
+      slug: result.data.slug,
+      tagline: result.data.tagline ?? null,
+      description: result.data.description ?? null,
+      websiteUrl: result.data.websiteUrl,
+      tags: result.data.tags,
+      userId: result.data.userId ?? null,
+      organizationId: result.data.organizationId ?? null,
+      submittedBy: result.data.submittedBy,
+      status: "pending", // Hardcoding default state for new entries
     });
 
-    revalidatePath("/");
+    // 5. Instantly bust the tag cache so the application pulls fresh data from Neon
+    revalidateTag("products" , {});
 
     return {
       success: true,
@@ -29,6 +55,7 @@ export async function addProduct(payload: unknown) {
     if (error instanceof Error && error.message.includes("products_slug_idx")) {
       return { success: false, error: "A product with this slug already exists." };
     }
+    console.error("Database Insertion Error:", error);
     return { success: false, error: "Something went wrong. Please try again." };
   }
 }
