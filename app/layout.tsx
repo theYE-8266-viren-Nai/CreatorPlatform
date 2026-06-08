@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Navbar from "./components/Navbar";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,8 @@ export default function RootLayout({
         <ClerkProvider appearance={{ theme: shadcn }}>
           <Navbar />
           {children}
+          <Toaster position="top-right" /> {/* ← add this */}
+
         </ClerkProvider>
       </body>
     </html>

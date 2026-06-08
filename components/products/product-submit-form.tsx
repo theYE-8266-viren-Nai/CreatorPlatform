@@ -3,7 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Sparkles } from "lucide-react";
 import { useForm } from "react-hook-form";
-
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import {
@@ -35,6 +36,7 @@ function slugify(value: string) {
 }
 
 export default function ProductSubmitForm() {
+  const router = useRouter();
   const form = useForm<ProductSubmitFormValues>({
     resolver: zodResolver(productSubmitFormSchema),
     defaultValues: {
@@ -44,6 +46,7 @@ export default function ProductSubmitForm() {
       description: "",
       websiteUrl: "",
       tags: "",
+      
     },
   });
 
@@ -54,11 +57,14 @@ export default function ProductSubmitForm() {
       ...values,
       tags: parseProductTagsInput(values.tags),
     };
+  
     const result = await addProduct(payload);
 
-    if (result?.error) {
-      form.setError("slug", { message: result.error });
-      return;
+    if (result?.success) {
+      toast.success(result.message);  // ← show toast
+      router.push("/");               // ← then redirect
+    } else {
+      form.setError("slug", { message: result?.error });
     }
   }
 

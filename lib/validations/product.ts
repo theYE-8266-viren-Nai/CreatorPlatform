@@ -60,6 +60,9 @@ export const productCreateSchema = z.object({
   tags: productTagsSchema.default([]),
 });
 
+/** Server action insert validation (alias for productCreateSchema) */
+export const productServerSchema = productCreateSchema;
+
 /** All insertable columns, including server-set metadata */
 export const productInsertSchema = productCreateSchema.extend({
   status: productStatusSchema.default("pending"),
