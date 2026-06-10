@@ -46,7 +46,7 @@ export default function ProductSubmitForm() {
       description: "",
       websiteUrl: "",
       tags: "",
-      
+
     },
   });
 
@@ -57,7 +57,7 @@ export default function ProductSubmitForm() {
       ...values,
       tags: parseProductTagsInput(values.tags),
     };
-  
+
     const result = await addProduct(payload);
 
     if (result?.success) {

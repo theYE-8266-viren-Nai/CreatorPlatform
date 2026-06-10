@@ -12,7 +12,7 @@ export async function getFeaturedProducts() {
     .select()
     .from(products)
     .where(eq(products.status, "approved")); // only show approved products
-      console.log(productsData);
+      // console.log(productsData);
 
   return productsData;
 }

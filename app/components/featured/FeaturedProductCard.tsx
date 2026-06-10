@@ -12,11 +12,15 @@ type Product = InferSelectModel<typeof products>;
 type FeaturedProductCardProps = {
   product: Product;
   className?: string;
+  featured?: boolean;
+  isNew?: boolean;
 };
 
 export function FeaturedProductCard({
   product,
   className,
+  featured = true,
+  isNew = false,
 }: FeaturedProductCardProps) {
   return (
     <article
@@ -35,10 +39,17 @@ export function FeaturedProductCard({
               {product.name}
             </Link>
           </h3>
-          <span className="inline-flex items-center gap-1 rounded-full bg-brand-pink px-2.5 py-0.5 text-[11px] font-semibold text-white">
-            <Star className="size-3 fill-white stroke-white" aria-hidden />
-            Featured
-          </span>
+          {featured && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-brand-pink px-2.5 py-0.5 text-[11px] font-semibold text-white">
+              <Star className="size-3 fill-white stroke-white" aria-hidden />
+              Featured
+            </span>
+          )}
+          {isNew && (
+            <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-[11px] font-medium text-green-700">
+              New
+            </span>
+          )}
         </div>
 
         <p className="text-sm leading-relaxed text-[#0a2533]/70">

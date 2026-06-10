@@ -1,9 +1,10 @@
 import { Sparkles, CalendarDays } from "lucide-react";
 import { getRecentlyLaunchedProducts } from "@/lib/products/product-select";
 import { getMostRecentProduct } from "@/lib/products/utils";
-import { ProductCard } from "@/components/products/product-card";
+import { FeaturedProductCard } from "./FeaturedProductCard";
 
 export async function RecentlyLaunchedSection() {
+  
   const products = await getRecentlyLaunchedProducts();
   const mostRecentId = getMostRecentProduct(products)?.id;
 
@@ -61,9 +62,10 @@ export async function RecentlyLaunchedSection() {
             key={product.id}
             className="transition-all duration-200 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:drop-shadow-xl"
           >
-            <ProductCard
+            <FeaturedProductCard
               product={product}
-              mostRecent={product.id === mostRecentId}
+              featured={false}
+              isNew={product.id === mostRecentId}
             />
           </li>
         ))}

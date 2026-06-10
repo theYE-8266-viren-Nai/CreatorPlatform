@@ -9,11 +9,16 @@ import { auth, currentUser } from "@clerk/nextjs/server"; // Import Clerk server
 export async function addProduct(payload: unknown) {
   try {
     // 1. Grab authentication details securely from Clerk on the server
-    const { userId } = await auth();
+    const { userId, orgId, sessionClaims } = await auth();
+    console.log({ userId, orgId, sessionClaims }); // ← check your terminal
+
     const user = await currentUser();
 
     if (!userId) {
       return { success: false, error: "You must be logged in to submit a product." };
+    }
+    if (!orgId) {
+      return { success: false, error: "You must be a member of a organization to submit a product." };
     }
 
     // 2. Build out the complete metadata payload matching your schema definitions
@@ -21,6 +26,8 @@ export async function addProduct(payload: unknown) {
       ...(payload as Record<string, any>),
       userId,
       submittedBy: user?.username || user?.firstName || "anonymous",
+      organizationId: orgId, // ← add this
+
     };
 
     // 3. Validate against productInsertSchema (handles status defaults, metadata, etc.)
@@ -39,13 +46,13 @@ export async function addProduct(payload: unknown) {
       websiteUrl: result.data.websiteUrl,
       tags: result.data.tags,
       userId: result.data.userId ?? null,
-      organizationId: result.data.organizationId ?? null,
+      organizationId: result.data.organizationId ?? null ,  // ← now safely populated
       submittedBy: result.data.submittedBy,
       status: "pending", // Hardcoding default state for new entries
     });
 
     // 5. Instantly bust the tag cache so the application pulls fresh data from Neon
-    revalidateTag("products" , {});
+    revalidateTag("products", {});
 
     return {
       success: true,

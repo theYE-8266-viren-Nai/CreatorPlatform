@@ -6,7 +6,7 @@ export default function SignInPage() {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <Suspense fallback={<CenteredSpinner />}>
-        <SignIn />
+        <SignIn routing="path" path="/sign-in" signUpUrl="/sign-up" />
       </Suspense>
     </div>
   );
