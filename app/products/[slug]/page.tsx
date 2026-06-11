@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+
+import { ProductDetail } from "@/components/products/product-detail";
 import {
   getFeaturedProducts,
   getProductBySlug,
 } from "@/lib/products/product-select";
-import Link from "next/link";
-import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
   const products = await getFeaturedProducts();
@@ -13,13 +15,30 @@ export async function generateStaticParams() {
   }));
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
+
+  if (!product) {
+    return { title: "Product Not Found — iBuiltThis" };
+  }
+
+  return {
+    title: `${product.name} — iBuiltThis`,
+    description: product.tagline ?? product.description ?? undefined,
+  };
+}
+
 export default async function ProductPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  
   const product = await getProductBySlug(slug);
 
   if (!product) {
@@ -27,17 +46,10 @@ export default async function ProductPage({
   }
 
   return (
-    <main className="hero-gradient min-h-screen px-4 py-24 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-2xl">
-        <Link href="/" className="text-sm text-slate-600 hover:text-brand-pink">
-          ← Back to home
-        </Link>
-        <h1 className="mt-6 text-3xl font-bold text-slate-900">{product.name}</h1>
-        <p className="mt-4 text-slate-600">{product.description}</p>
-        <p className="mt-6 text-sm font-medium text-slate-700">
-          {product.voteCount} votes
-        </p>
-      </div>
-    </main>
+    <div className="hero-gradient min-h-screen pt-16 font-sans">
+      <main className="px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <ProductDetail product={product} />
+      </main>
+    </div>
   );
 }

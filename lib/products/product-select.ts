@@ -17,6 +17,20 @@ export async function getFeaturedProducts() {
   return productsData;
 }
 
+export async function getAllProducts() {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("products", "all-products");
+
+  const productsData = await db
+    .select()
+    .from(products)
+    .where(eq(products.status, "approved"))
+    .orderBy(desc(products.voteCount), desc(products.approvedAt));
+
+  return productsData;
+}
+
 export async function getRecentlyLaunchedProducts(daysAgo: number = 7) {
   "use cache";
   cacheLife("minutes");

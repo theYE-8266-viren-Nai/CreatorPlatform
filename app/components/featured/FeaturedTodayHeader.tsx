@@ -1,7 +1,6 @@
-import { ArrowUpRight, Star } from "lucide-react";
-import Link from "next/link";
+import { Star } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { ViewAllProductsLink } from "@/components/products/view-all-products-link";
 
 export function FeaturedTodayHeader() {
   return (
@@ -19,16 +18,7 @@ export function FeaturedTodayHeader() {
         </p>
       </div>
 
-      <Button
-        variant="outline"
-        asChild
-        className="h-10 shrink-0 self-start rounded-lg border-[#0a2533]/25 bg-[#faf8f2] px-4 text-sm font-medium text-[#0a2533] shadow-none hover:bg-white/80"
-      >
-        <Link href="#products">
-          View All
-          <ArrowUpRight className="size-4" aria-hidden />
-        </Link>
-      </Button>
+      <ViewAllProductsLink />
     </header>
   );
 }

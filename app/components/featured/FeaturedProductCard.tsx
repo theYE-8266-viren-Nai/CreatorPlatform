@@ -67,7 +67,12 @@ export function FeaturedProductCard({
         </ul>
       </div>
 
-      <VoteWidget initialVotes={product.voteCount} className="pt-0.5" />
+      <VoteWidget
+        key={product.voteCount}
+        productId={product.id}
+        initialVotes={product.voteCount}
+        className="pt-0.5"
+      />
     </article>
   );
 }

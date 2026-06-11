@@ -6,3 +6,15 @@ export function getMostRecentProduct<T extends { approvedAt: Date | null }>(prod
     return current.approvedAt > latest.approvedAt ? current : latest;
   }, null as T | null);
 }
+
+export function formatLaunchDate(date: Date | null | undefined): string {
+  if (!date) {
+    return "Not yet launched";
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+}

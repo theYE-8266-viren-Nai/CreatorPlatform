@@ -5,7 +5,7 @@ import { products } from "@/db/schema";
 import { revalidateTag } from "next/cache";
 import { productInsertSchema } from "@/lib/validations/product";
 import { auth, currentUser } from "@clerk/nextjs/server"; // Import Clerk server helpers
-
+import { eq, sql } from "drizzle-orm";
 export async function addProduct(payload: unknown) {
   try {
     // 1. Grab authentication details securely from Clerk on the server
@@ -23,7 +23,7 @@ export async function addProduct(payload: unknown) {
 
     // 2. Build out the complete metadata payload matching your schema definitions
     const fullPayload = {
-      ...(payload as Record<string, any>),
+      ...(payload as Record<string, unknown>),
       userId,
       submittedBy: user?.username || user?.firstName || "anonymous",
       organizationId: orgId, // ← add this
@@ -46,13 +46,13 @@ export async function addProduct(payload: unknown) {
       websiteUrl: result.data.websiteUrl,
       tags: result.data.tags,
       userId: result.data.userId ?? null,
-      organizationId: result.data.organizationId ?? null ,  // ← now safely populated
+      organizationId: result.data.organizationId ?? null,  // ← now safely populated
       submittedBy: result.data.submittedBy,
       status: "pending", // Hardcoding default state for new entries
     });
 
     // 5. Instantly bust the tag cache so the application pulls fresh data from Neon
-    revalidateTag("products", {});
+    revalidateTag("products", "max");
 
     return {
       success: true,
@@ -66,3 +66,95 @@ export async function addProduct(payload: unknown) {
     return { success: false, error: "Something went wrong. Please try again." };
   }
 }
+export const upvoteProductAction = async (productId: string) => {
+  try {
+    // 1. auth check
+    const { userId } = await auth();
+
+    if (!userId) {
+      return {
+        success: false,
+        message: "You must be logged in to vote.",
+        voteCount: 0,
+      };
+    }
+
+    // 2. update vote count
+    const [updated] = await db
+      .update(products)
+      .set({ voteCount: sql`${products.voteCount} + 1` })
+      .where(eq(products.id, parseInt(productId)))
+      .returning({ slug: products.slug, voteCount: products.voteCount });
+
+    if (!updated) {
+      return {
+        success: false,
+        message: "Product not found.",
+        voteCount: 0,
+      };
+    }
+
+    // 3. bust cache
+    revalidateTag("products", "max");
+    revalidateTag(`product-${updated.slug}`, "max");
+
+    return {
+      success: true,
+      message: "Vote recorded!",
+      voteCount: updated.voteCount,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Failed to upvote product",
+      voteCount: 0,
+    };
+  }
+};
+export const downvoteProductAction = async (productId: string) => {
+  try {
+    // 1. auth check
+    const { userId } = await auth();
+
+    if (!userId) {
+      return {
+        success: false,
+        message: "You must be logged in to vote.",
+        voteCount: 0,
+      };
+    }
+
+    // 2. update vote count — prevent going below 0
+    const [updated] = await db
+      .update(products)
+      .set({ voteCount: sql`GREATEST(${products.voteCount} - 1, 0)` })
+      .where(eq(products.id, parseInt(productId)))
+      .returning({ slug: products.slug, voteCount: products.voteCount });
+
+    if (!updated) {
+      return {
+        success: false,
+        message: "Product not found.",
+        voteCount: 0,
+      };
+    }
+
+    // 3. bust cache
+    revalidateTag("products", "max");
+    revalidateTag(`product-${updated.slug}`, "max");
+
+    return {
+      success: true,
+      message: "Vote removed!",
+      voteCount: updated.voteCount,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Failed to downvote product",
+      voteCount: 0,
+    };
+  }
+};
