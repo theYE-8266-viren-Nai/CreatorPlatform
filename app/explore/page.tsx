@@ -1,11 +1,8 @@
-import React from 'react'
+// page.tsx
+import ProductExplorer from "../../components/products/Prouduct-explorer";
+import { getAllProducts } from "@/lib/products/product-select";
 
-const page = () => {
-  return (
-    <>
-      <h1>This is a explore page </h1>
-    </>
-  )
+export default async function Page() {
+  const products = await getAllProducts();
+  return <ProductExplorer products={products} />;
 }
-
-export default page
