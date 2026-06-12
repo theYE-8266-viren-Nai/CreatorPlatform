@@ -2,6 +2,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -39,6 +40,7 @@ export default function RootLayout({
         <ClerkProvider appearance={{ theme: shadcn }}>
           <Navbar />
           {children}
+          <Footer />
           <Toaster position="top-right" /> {/* ← add this */}
 
         </ClerkProvider>

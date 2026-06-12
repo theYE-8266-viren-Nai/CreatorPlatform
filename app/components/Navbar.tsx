@@ -23,9 +23,9 @@ type NavLink = {
 
 /** Primary navigation items shown in desktop bar and mobile drawer */
 const NAV_LINKS: NavLink[] = [
-  { label: "Home", href: "#home", icon: House },
+  { label: "Home", href: "/", icon: House },
   // { label: "About", href: "#about", icon: Info },
-  { label: "Explore", href: "#services", icon: Briefcase },
+  { label: "Explore", href: "/explore", icon: Briefcase },
   // { label: "Contact", href: "#contact", icon: Mail },
 ];
 
@@ -55,7 +55,7 @@ export default function Navbar() {
       >
         {/* ——— Logo (left) ——— */}
         <Link
-          href="#home"
+          href="/"
           className="group flex items-center gap-2.5"
           onClick={closeMenu}
         >
