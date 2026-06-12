@@ -1,5 +1,6 @@
 "use client";
 
+import { Flame } from "lucide-react";
 import { VoteWidget } from "@/app/components/featured/VoteWidget";
 
 type ProductSupportSectionProps = {
@@ -33,7 +34,8 @@ export function ProductSupportSection({
           <hr className="my-6 border-[#0a2533]/10" />
           <div className="flex justify-center">
             <span className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-pink px-6 py-2.5 text-sm font-semibold text-white">
-              🔥 Featured Product
+              <Flame className="h-4 w-4" />
+              Featured Product
             </span>
           </div>
         </>
