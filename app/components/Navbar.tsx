@@ -9,6 +9,7 @@ import {
   House,
   LogIn,
   Menu,
+  Shield,
   Sparkles,
   UserPlus,
   X,
@@ -121,7 +122,15 @@ export default function Navbar() {
               </SignUpButton>
             </Show>
             <Show when="signed-in">
-              <UserButton />
+              <UserButton userProfileUrl="/user-profile" userProfileMode="navigation">
+                <UserButton.MenuItems>
+                  <UserButton.Link
+                    label="Product Admin"
+                    labelIcon={<Shield className="size-4" aria-hidden />}
+                    href="/user-profile/product-admin"
+                  />
+                </UserButton.MenuItems>
+              </UserButton>
             </Show>
           </div>
         </div>
@@ -215,7 +224,15 @@ export default function Navbar() {
                 <span className="text-sm font-semibold text-slate-700">
                   Account
                 </span>
-                <UserButton />
+                <UserButton userProfileUrl="/user-profile" userProfileMode="navigation">
+                  <UserButton.MenuItems>
+                    <UserButton.Link
+                      label="Product Admin"
+                      labelIcon={<Shield className="size-4" aria-hidden />}
+                      href="/user-profile/product-admin"
+                    />
+                  </UserButton.MenuItems>
+                </UserButton>
               </div>
             </Show>
           </li>

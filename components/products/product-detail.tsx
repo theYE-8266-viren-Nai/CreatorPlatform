@@ -1,6 +1,7 @@
+"use client";
+
 import type { InferSelectModel } from "drizzle-orm";
 import { Calendar, ExternalLink, Star, User } from "lucide-react";
-import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { products } from "@/db/schema";
@@ -16,14 +17,17 @@ type ProductDetailProps = {
 };
 
 export function ProductDetail({ product, featured = true }: ProductDetailProps) {
+  const handleGoBack = () => {
+    window.history.back();
+  };
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
-      <Link
-        href="/products"
+      <button
+        onClick={handleGoBack}
         className="inline-flex w-fit text-sm font-medium text-[#0a2533]/70 transition-colors hover:text-brand-pink"
       >
-        ← Back to Explore
-      </Link>
+        ← Back
+      </button>
 
       <header className="space-y-4">
         <div className="flex items-start gap-3">
