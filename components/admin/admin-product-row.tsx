@@ -2,6 +2,7 @@ import { ExternalLink, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import AdminProductActions from "./admin-product-actions";
 
 import { AdminStatusBadge } from "./admin-status-badge";
 import type { AdminProduct } from "./types";
@@ -60,36 +61,8 @@ export function AdminProductRow({ product, className }: AdminProductRowProps) {
         )}
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        {product.status === "pending" && (
-          <>
-            <Button
-              type="button"
-              size="sm"
-              className="h-8 bg-[#1f6b3a] px-3 text-xs font-semibold text-white hover:bg-[#1f6b3a]/90"
-            >
-              Approve
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="h-8 border-[#b42318]/30 px-3 text-xs font-semibold text-[#b42318] hover:bg-[#fde8ea]"
-            >
-              Reject
-            </Button>
-          </>
-        )}
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="h-8 border-[#0a2533]/20 px-3 text-xs font-medium text-[#0a2533]/80 hover:bg-[#0a2533]/5"
-        >
-          <Trash2 className="size-3.5" aria-hidden />
-          Delete
-        </Button>
-      </div>
+            <AdminProductActions status={product.status} productId={String(product.id)} />
+
     </article>
   );
 }
